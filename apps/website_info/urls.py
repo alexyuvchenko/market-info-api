@@ -1,11 +1,18 @@
-from django.urls import include, path
-from rest_framework.routers import DefaultRouter
+from django.urls import re_path
 
 from .views import WebsiteInfoView
 
-router = DefaultRouter()
-router.register(r"website-info", WebsiteInfoView, basename="websiteinfo")
-
 urlpatterns = [
-    path("", include(router.urls)),
+    # List and create
+    re_path(
+        r"^website-info/?$",
+        WebsiteInfoView.as_view({"get": "list", "post": "create"}),
+        name="websiteinfo-list",
+    ),
+    # Retrieve, update, and destroy
+    re_path(
+        r"^website-info/(?P<pk>[^/.]+)/?$",
+        WebsiteInfoView.as_view({"get": "retrieve", "delete": "destroy"}),
+        name="websiteinfo-detail",
+    ),
 ]
