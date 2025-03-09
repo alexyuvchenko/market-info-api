@@ -19,7 +19,12 @@ class URLValidator(serializers.Serializer):
 
 
 class WebsiteInfoSerializer(serializers.ModelSerializer):
-    """Serializer for the WebsiteInfo model."""
+    # Explicitly define images as a ListField to ensure proper OpenAPI schema
+    images = serializers.ListField(
+        child=serializers.URLField(),
+        required=False,
+        help_text="List of image URLs found on the website",
+    )
 
     class Meta:
         model = WebsiteInfo

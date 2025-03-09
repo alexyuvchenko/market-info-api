@@ -112,4 +112,16 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
     "COMPONENT_SPLIT_REQUEST": True,
     "SCHEMA_PATH_PREFIX": r"/api/",
+    
+    # Add examples
+    "EXAMPLES": {
+        "WebsiteInfo": {
+            "url": "https://example.com",
+            "domain_name": "example.com",
+            "protocol": "https",
+            "title": "Example Domain",
+            "images": ["https://example.com/image1.jpg", "https://example.com/image2.jpg"],
+            "stylesheets_count": 2,
+        }
+    },
 }
