@@ -76,27 +76,34 @@ market-info-api/
    cd market-info-api
    ```
 
-2. Install dependencies using Poetry:
+2. Install dependencies using Poetry in a virtual environment:
    ```bash
    make local-install
    ```
 
-3. Run migrations:
+3. Activate the virtual environment (optional):
+   ```bash
+   make local-shell
+   ```
+   
+   Or run commands with `poetry run` prefix (handled by the Makefile commands).
+
+4. Run migrations:
    ```bash
    make local-migrate
    ```
 
-4. Create a superuser (optional):
+5. Create a superuser (optional):
    ```bash
    make local-superuser
    ```
 
-5. Run the development server:
+6. Run the development server:
    ```bash
    make local-run
    ```
 
-6. The API will be available at http://localhost:8000/api/
+7. The API will be available at http://localhost:8000/api/
    The admin interface will be available at http://localhost:8000/admin/
 
 ## Makefile Commands
@@ -123,7 +130,8 @@ The project includes a Makefile to simplify common tasks:
 - `make clean` - Remove Python cache files
 
 ### Local Development Commands
-- `make local-install` - Install dependencies with Poetry
+- `make local-install` - Install dependencies in a virtual environment
+- `make local-shell` - Activate the virtual environment
 - `make local-migrate` - Run Django migrations locally
 - `make local-makemigrations` - Create new Django migrations locally
 - `make local-superuser` - Create a Django superuser locally

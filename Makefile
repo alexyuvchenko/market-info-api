@@ -15,6 +15,8 @@ help:
 	@echo "  make format        - Format code with black and isort"
 	@echo "  make clean         - Remove Python cache files"
 	@echo "  make start         - Build, migrate, and start the application"
+	@echo "  make local-install - Install dependencies in a virtual environment"
+	@echo "  make local-shell   - Activate the virtual environment"
 
 # Docker commands
 build:
@@ -57,11 +59,16 @@ format:
 start: build
 	docker-compose up -d
 	@echo "Waiting for containers to start..."
+	@sleep 5
 	docker-compose exec web python manage.py migrate
 
-# Local development commands (without Docker)
+# Local development commands (with virtual environment)
 local-install:
+	poetry config virtualenvs.in-project true
 	poetry install
+
+local-shell:
+	poetry shell
 
 local-migrate:
 	poetry run python manage.py migrate
@@ -98,7 +105,7 @@ clean:
 	find . -type d -name ".coverage" -exec rm -rf {} +
 	find . -type d -name "htmlcov" -exec rm -rf {} +
 	find . -type d -name ".tox" -exec rm -rf {} +
-	find . -type d -name ".nox" -exec rm -rf {} + 
+	find . -type d -name ".nox" -exec rm -rf {} +
 
 # Default target
 all: help
