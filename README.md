@@ -35,8 +35,7 @@ market-info-api/
 ## Requirements
 
 - Python 3.11+
-- Docker and Docker Compose
-- Poetry (for dependency management)
+- Docker and Docker Compose (for containerized development)
 
 ## Setup
 
@@ -76,17 +75,20 @@ market-info-api/
    cd market-info-api
    ```
 
-2. Install dependencies using Poetry in a virtual environment:
+2. Install dependencies in a local virtual environment:
    ```bash
    make local-install
    ```
+   This will:
+   - Create a virtual environment in the `.venv` directory
+   - Install all required dependencies in the virtual environment
 
-3. Activate the virtual environment (optional):
+3. Activate the virtual environment:
    ```bash
-   make local-shell
+   source .venv/bin/activate
    ```
    
-   Or run commands with `poetry run` prefix (handled by the Makefile commands).
+   Or use the Makefile commands which automatically use the virtual environment.
 
 4. Run migrations:
    ```bash
@@ -130,8 +132,8 @@ The project includes a Makefile to simplify common tasks:
 - `make clean` - Remove Python cache files
 
 ### Local Development Commands
-- `make local-install` - Install dependencies in a virtual environment
-- `make local-shell` - Activate the virtual environment
+- `make local-install` - Install dependencies in a local virtual environment
+- `make local-shell` - Show instructions to activate the virtual environment
 - `make local-migrate` - Run Django migrations locally
 - `make local-makemigrations` - Create new Django migrations locally
 - `make local-superuser` - Create a Django superuser locally
