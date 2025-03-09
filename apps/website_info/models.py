@@ -3,6 +3,7 @@ from django.db import models
 
 class WebsiteInfo(models.Model):
     """Model to store information about websites."""
+
     url = models.URLField(max_length=2000)
     domain_name = models.CharField(max_length=255)
     protocol = models.CharField(max_length=10)
@@ -13,9 +14,9 @@ class WebsiteInfo(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-created_at']
-        verbose_name = 'Website Information'
-        verbose_name_plural = 'Website Information'
+        ordering = ["-created_at"]
+        verbose_name = "Website Information"
+        verbose_name_plural = "Website Information"
 
     def __str__(self):
-        return self.url 
+        return self.url
