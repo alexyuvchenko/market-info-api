@@ -17,7 +17,8 @@ help:
 	@echo "  make collectstatic - Collect static files"
 	@echo ""
 	@echo "Development commands:"
-	@echo "  make test          - Run tests"
+	@echo "  make test          - Run tests with pytest"
+	@echo "  make test-coverage - Run tests with coverage report"
 	@echo "  make lint          - Run linting checks"
 	@echo "  make format        - Format code with black and isort"
 	@echo "  make clean         - Remove Python cache files"
@@ -32,7 +33,8 @@ help:
 	@echo "  make local-makemigrations - Create new Django migrations locally"
 	@echo "  make local-superuser - Create a Django superuser locally"
 	@echo "  make local-run     - Start development server locally"
-	@echo "  make local-test    - Run tests locally"
+	@echo "  make local-test    - Run tests locally with pytest"
+	@echo "  make local-test-coverage - Run tests locally with coverage report"
 	@echo "  make local-lint    - Run linting checks locally"
 	@echo "  make local-format  - Format code locally"
 
@@ -72,8 +74,8 @@ collectstatic:
 
 # Development commands
 test:
-	@echo "Running tests..."
-	docker-compose exec web python manage.py test
+	@echo "Running tests with pytest..."
+	docker-compose exec web pytest
 
 lint:
 	@echo "Running linting checks..."
@@ -126,8 +128,8 @@ local-run:
 	.venv/bin/python manage.py runserver
 	
 local-test:
-	@echo "Running tests..."
-	.venv/bin/python manage.py test
+	@echo "Running tests with pytest..."
+	.venv/bin/pytest
 
 local-lint:
 	@echo "Running linting checks..."
@@ -137,6 +139,15 @@ local-format:
 	@echo "Formatting code..."
 	.venv/bin/black .
 	.venv/bin/isort .
+
+# Add coverage commands
+test-coverage:
+	@echo "Running tests with coverage..."
+	docker-compose exec web pytest --cov=apps --cov-report=html
+
+local-test-coverage:
+	@echo "Running tests with coverage..."
+	.venv/bin/pytest --cov=apps --cov-report=html
 
 # Utility commands
 clean:
