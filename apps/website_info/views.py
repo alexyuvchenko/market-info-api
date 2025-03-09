@@ -9,8 +9,8 @@ from .models import WebsiteInfo
 from .serializers import WebsiteInfoSerializer, URLValidator
 
 
-class WebsiteInfoViewSet(viewsets.ModelViewSet):
-    """ViewSet for the WebsiteInfo model."""
+class WebsiteInfoView(viewsets.ModelViewSet):
+    """View for the WebsiteInfo model."""
     queryset = WebsiteInfo.objects.all()
     serializer_class = WebsiteInfoSerializer
 

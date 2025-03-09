@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Django REST API for fetching and storing website information"
 authors = ["Alexander Yuvcehnko <alex.yuvchenko@gmail.com>"]
 readme = "README.md"
+packages = [{include = "apps"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -25,9 +26,9 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.black]
-line-length = 99
+line-length = 100
 target-version = ["py311"]
 
 [tool.isort]
 profile = "black"
-line_length = 99 
+line_length = 100

@@ -14,6 +14,7 @@ help:
 	@echo "  make lint          - Run linting checks"
 	@echo "  make format        - Format code with black and isort"
 	@echo "  make clean         - Remove Python cache files"
+	@echo "  make start         - Build, migrate, and start the application"
 
 # Docker commands
 build:
@@ -51,6 +52,12 @@ lint:
 format:
 	docker-compose exec web black .
 	docker-compose exec web isort .
+
+# Combined commands
+start: build
+	docker-compose up -d
+	@echo "Waiting for containers to start..."
+	docker-compose exec web python manage.py migrate
 
 # Local development commands (without Docker)
 local-install:
@@ -92,3 +99,6 @@ clean:
 	find . -type d -name "htmlcov" -exec rm -rf {} +
 	find . -type d -name ".tox" -exec rm -rf {} +
 	find . -type d -name ".nox" -exec rm -rf {} + 
+
+# Default target
+all: help

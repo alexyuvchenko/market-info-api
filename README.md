@@ -15,21 +15,21 @@ The project follows a clean, modular structure:
 
 ```
 market-info-api/
-├── apps/                  # Main Django project directory
-│   ├── core/              # Core app with models, views, and serializers
-│   │   ├── admin.py       # Admin configuration
-│   │   ├── models.py      # Database models
-│   │   ├── serializers.py # REST API serializers
-│   │   ├── urls.py        # URL routing for the core app
-│   │   └── views.py       # API views and logic
-│   ├── settings.py        # Project settings
-│   ├── urls.py            # Main URL routing
-│   └── wsgi.py            # WSGI configuration for deployment
-├── docker-compose.yml     # Docker Compose configuration
-├── Dockerfile             # Docker configuration
-├── manage.py              # Django management script
-├── Makefile               # Utility commands
-└── pyproject.toml         # Poetry dependency management
+├── apps/                     # Main Django project directory
+│   ├── website_info/         # Website info app with models, views, and serializers
+│   │   ├── admin.py          # Admin configuration
+│   │   ├── models.py         # Database models
+│   │   ├── serializers.py    # REST API serializers
+│   │   ├── urls.py           # URL routing for the website_info app
+│   │   └── views.py          # API views and logic
+│   ├── settings.py           # Project settings
+│   ├── urls.py               # Main URL routing
+│   └── wsgi.py               # WSGI configuration for deployment
+├── docker-compose.yml        # Docker Compose configuration
+├── Dockerfile                # Docker configuration
+├── manage.py                 # Django management script
+├── Makefile                  # Utility commands
+└── pyproject.toml            # Poetry dependency management
 ```
 
 ## Requirements
@@ -48,23 +48,25 @@ market-info-api/
    cd market-info-api
    ```
 
-2. Build and run the Docker containers:
+2. Build, migrate, and start the application in one command:
+   ```bash
+   make start
+   ```
+
+   Or step by step:
    ```bash
    make build
    make up
-   ```
-
-3. Run migrations:
-   ```bash
    make migrate
    ```
 
-4. Create a superuser (optional):
+3. Create a superuser (optional):
    ```bash
    make superuser
    ```
 
-5. The API will be available at http://localhost:8000/api/
+4. The API will be available at http://localhost:8000/api/
+   The admin interface will be available at http://localhost:8000/admin/
 
 ### Without Docker (Local Development)
 
@@ -95,6 +97,7 @@ market-info-api/
    ```
 
 6. The API will be available at http://localhost:8000/api/
+   The admin interface will be available at http://localhost:8000/admin/
 
 ## Makefile Commands
 
@@ -105,6 +108,7 @@ The project includes a Makefile to simplify common tasks:
 - `make up` - Start Docker containers
 - `make down` - Stop Docker containers
 - `make shell` - Open a shell in the web container
+- `make start` - Build, migrate, and start the application in one command
 
 ### Django Commands
 - `make migrate` - Run Django migrations
@@ -132,18 +136,18 @@ The project includes a Makefile to simplify common tasks:
 
 ### Website Information
 
-- `GET /api/websites/` - List all website information
-- `POST /api/websites/` - Create new website information
+- `GET /api/website-info/` - List all website information
+- `POST /api/website-info/` - Create new website information
   - Required parameters: `url` (string)
-- `GET /api/websites/{id}/` - Retrieve specific website information
-- `DELETE /api/websites/{id}/` - Delete specific website information
+- `GET /api/website-info/{id}/` - Retrieve specific website information
+- `DELETE /api/website-info/{id}/` - Delete specific website information
 
 ## Example Usage
 
 ### Create Website Information
 
 ```bash
-curl -X POST http://localhost:8000/api/websites/ \
+curl -X POST http://localhost:8000/api/website-info/ \
   -H "Content-Type: application/json" \
   -d '{"url": "https://www.example.com"}'
 ```
@@ -151,19 +155,19 @@ curl -X POST http://localhost:8000/api/websites/ \
 ### List All Website Information
 
 ```bash
-curl -X GET http://localhost:8000/api/websites/
+curl -X GET http://localhost:8000/api/website-info/
 ```
 
 ### Retrieve Specific Website Information
 
 ```bash
-curl -X GET http://localhost:8000/api/websites/1/
+curl -X GET http://localhost:8000/api/website-info/1/
 ```
 
 ### Delete Website Information
 
 ```bash
-curl -X DELETE http://localhost:8000/api/websites/1/
+curl -X DELETE http://localhost:8000/api/website-info/1/
 ```
 
 ## License

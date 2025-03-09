@@ -6,19 +6,16 @@ WORKDIR /app
 RUN pip install poetry==2.1.1
 
 # Copy poetry configuration files
-COPY pyproject.toml poetry.lock* ./
+COPY pyproject.toml ./
 
 # Configure poetry to not use a virtual environment
 RUN poetry config virtualenvs.create false
 
-# Install dependencies
+# Install dependencies without the root package
 RUN poetry install --no-interaction --no-ansi --no-root
 
 # Copy project files
 COPY . .
-
-# Install the project
-RUN poetry install --no-interaction --no-ansi
 
 # Expose port
 EXPOSE 8000
