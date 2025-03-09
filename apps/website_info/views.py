@@ -10,15 +10,64 @@ from .serializers import URLValidator, WebsiteInfoSerializer
 
 
 class WebsiteInfoView(viewsets.ModelViewSet):
-    """View for the WebsiteInfo model."""
+    """
+    API endpoint for managing website information.
+
+    Provides CRUD operations for website information:
+    - List all website information
+    - Create new website information by providing a URL
+    - Retrieve specific website information by ID
+    - Delete specific website information by ID
+    """
 
     queryset = WebsiteInfo.objects.all()
     serializer_class = WebsiteInfoSerializer
 
+    def list(self, request, *args, **kwargs):
+        """
+        List all website information entries.
+
+        Returns a paginated list of all website information entries in the database.
+        """
+
+        return super().list(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieve a specific website information entry.
+
+        Returns the details of a specific website information entry identified by its ID.
+        """
+
+        return super().retrieve(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        """
+        Delete a specific website information entry.
+
+        Permanently removes a website information entry from the database.
+        """
+
+        return super().destroy(request, *args, **kwargs)
+
     def create(self, request, *args, **kwargs):
         """
-        Custom create method to handle URL validation and website information extraction.
-        If the URL already exists, return the existing record instead of creating a new one.
+        Create a new website information entry.
+
+        Fetches the provided URL, extracts information such as domain name, protocol,
+        title, images, and stylesheets count, and stores it in the database.
+
+        If the URL already exists in the database, returns the existing entry instead
+        of creating a new one.
+
+        Parameters:
+        - url: The URL to fetch and extract information from
+
+        Returns:
+        - 201 Created: If a new entry was created
+        - 200 OK: If the URL already exists
+        - 400 Bad Request: If the URL is invalid or cannot be fetched
+        - 500 Internal Server Error: If an error occurs during processing
         """
 
         # Validate URL

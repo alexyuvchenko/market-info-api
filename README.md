@@ -144,28 +144,33 @@ The project includes a Makefile to simplify common tasks:
 
 ## API Endpoints
 
-### Website Information
+The API provides endpoints for managing website information. The full API documentation is available through Swagger UI and ReDoc:
+
+- **OpenAPI Schema**: `/api/schema/` - Raw OpenAPI schema
+- **Swagger UI**: `/api/schema/swagger-ui/` - Interactive API documentation
+- **ReDoc**: `/api/schema/redoc/` - Alternative API documentation
+
+### Available Endpoints
 
 - `GET /api/website-info/` - List all website information
-- `POST /api/website-info/` - Create new website information
-  - Required parameters: `url` (string)
+- `POST /api/website-info/` - Create new website information by providing a URL
 - `GET /api/website-info/{id}/` - Retrieve specific website information
 - `DELETE /api/website-info/{id}/` - Delete specific website information
 
 ## Example Usage
+
+### List All Website Information
+
+```bash
+curl -X GET http://localhost:8000/api/website-info/
+```
 
 ### Create Website Information
 
 ```bash
 curl -X POST http://localhost:8000/api/website-info/ \
   -H "Content-Type: application/json" \
-  -d '{"url": "https://www.example.com"}'
-```
-
-### List All Website Information
-
-```bash
-curl -X GET http://localhost:8000/api/website-info/
+  -d '{"url": "https://example.com"}'
 ```
 
 ### Retrieve Specific Website Information
