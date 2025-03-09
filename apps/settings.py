@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     # Local apps
     "apps.website_info",
+    "apps.currency_rates",
 ]
 
 MIDDLEWARE = [

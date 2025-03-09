@@ -5,6 +5,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("apps.website_info.urls")),
+    path("api/", include("apps.currency_rates.urls")),
     # API Schema documentation - using regex to support both with and without trailing slash
     re_path(r"^api/schema/?$", SpectacularAPIView.as_view(), name="schema"),
     re_path(
