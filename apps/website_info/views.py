@@ -20,6 +20,7 @@ class WebsiteInfoView(viewsets.ModelViewSet):
         Custom create method to handle URL validation and website information extraction.
         If the URL already exists, return the existing record instead of creating a new one.
         """
+
         # Validate URL
         url_validator = URLValidator(data=request.data)
         if not url_validator.is_valid():
@@ -34,16 +35,14 @@ class WebsiteInfoView(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         try:
-            # Extract website information
             website_info = self._extract_website_info(url)
 
             # Create WebsiteInfo object
-            serializer = self.get_serializer(data={"url": url, **website_info})
+            serializer = self.get_serializer(data=website_info)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
 
-            headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         except requests.RequestException as e:
             return Response(
@@ -51,45 +50,56 @@ class WebsiteInfoView(viewsets.ModelViewSet):
             )
         except Exception as e:
             return Response(
-                {"error": f"An error occurred: {str(e)}"},
+                {"error": f"Failed to process website: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
     def _extract_website_info(self, url):
-        """
-        Extract information from the website.
+        """Extract information from the website."""
 
-        Args:
-            url (str): The URL to extract information from.
-
-        Returns:
-            dict: Dictionary containing website information.
-        """
         # Parse URL
         parsed_url = urlparse(url)
         domain_name = parsed_url.netloc
         protocol = parsed_url.scheme
 
         # Fetch website content
-        response = requests.get(url, timeout=10)
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        }
+        response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
 
         # Parse HTML
         soup = BeautifulSoup(response.text, "html.parser")
 
-        # Extract title
-        title = soup.title.text if soup.title else None
-
-        # Extract images
-        images = [img.get("src") for img in soup.find_all("img") if img.get("src")]
-
-        # Count stylesheets
-        stylesheets_count = len(soup.find_all("link", rel="stylesheet"))
-
+        # Return website info
         return {
+            "url": url,
             "domain_name": domain_name,
             "protocol": protocol,
-            "title": title,
-            "images": images,
-            "stylesheets_count": stylesheets_count,
+            "title": soup.title.text.strip() if soup.title else None,
+            "images": self._extract_image_url(soup, protocol, domain_name),
+            "stylesheets_count": len(soup.find_all("link", rel="stylesheet")),
         }
+
+    def _extract_image_url(self, soup, protocol, domain_name):
+        """Extract and normalize image URLs from the soup."""
+
+        image_urls = []
+        for img in soup.find_all("img"):
+            src = img.get("src")
+            if not src:
+                continue
+
+            # Normalize image URL
+            if src.startswith("//"):
+                src = f"{protocol}:{src}"
+            elif src.startswith("/"):
+                src = f"{protocol}://{domain_name}{src}"
+            elif not src.startswith(("http://", "https://")):
+                src = f"{protocol}://{domain_name}/{src}"
+
+            image_urls.append(src)
+
+        return image_urls

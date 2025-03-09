@@ -9,7 +9,7 @@ from .models import WebsiteInfo
 class URLValidator(serializers.Serializer):
     """Serializer for validating URLs."""
 
-    url = serializers.CharField(max_length=2000)
+    url = serializers.CharField(max_length=2048)
 
     def validate_url(self, value):
         """Validate that the input is a valid URL."""
@@ -36,11 +36,6 @@ class WebsiteInfoSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = [
             "id",
-            "domain_name",
-            "protocol",
-            "title",
-            "images",
-            "stylesheets_count",
             "created_at",
             "updated_at",
         ]
