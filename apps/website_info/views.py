@@ -18,6 +18,7 @@ class WebsiteInfoView(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         """
         Custom create method to handle URL validation and website information extraction.
+        If the URL already exists, return the existing record instead of creating a new one.
         """
         # Validate URL
         url_validator = URLValidator(data=request.data)
@@ -25,6 +26,12 @@ class WebsiteInfoView(viewsets.ModelViewSet):
             return Response(url_validator.errors, status=status.HTTP_400_BAD_REQUEST)
 
         url = url_validator.validated_data["url"]
+
+        # Check if URL already exists
+        existing_info = WebsiteInfo.objects.filter(url=url).first()
+        if existing_info:
+            serializer = self.get_serializer(existing_info)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
         try:
             # Extract website information

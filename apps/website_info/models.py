@@ -4,7 +4,7 @@ from django.db import models
 class WebsiteInfo(models.Model):
     """Model to store information about websites."""
 
-    url = models.URLField(max_length=2000)
+    url = models.URLField(max_length=2048, unique=True)
     domain_name = models.CharField(max_length=255)
     protocol = models.CharField(max_length=10)
     title = models.TextField(blank=True, null=True)
