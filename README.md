@@ -34,7 +34,7 @@ market-info-api/
 
 ## Requirements
 
-- Python 3.11+
+- Python 3.10+
 - Docker and Docker Compose (for containerized development)
 
 ## Setup
