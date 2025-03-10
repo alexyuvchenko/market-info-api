@@ -2,40 +2,52 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .services import (
-    calculate_bitcoin_price_gbp,
-    get_bitcoin_price_eur,
-    get_eur_to_gbp_rate,
-)
+from .services import get_currency_rates
 
 
 class CurrencyRatesView(APIView):
     """
     API view for retrieving currency rates information.
 
-    Provides Bitcoin price in EUR, EUR to GBP conversion rate, and Bitcoin price in GBP.
+    Provides:
+    1. Bitcoin price in EUR (15min delayed)
+    2. EUR to GBP conversion rate (monthly average from ECB)
+    3. Bitcoin price in GBP (calculated using the above rates)
     """
 
+    @extend_schema(
+        description="Get Bitcoin prices and currency conversion rates",
+        responses={
+            200: {
+                "type": "object",
+                "properties": {
+                    "bitcoin_eur": {
+                        "type": "number",
+                        "description": "Bitcoin price in EUR (15min delayed)",
+                    },
+                    "eur_to_gbp": {
+                        "type": "number",
+                        "description": "Monthly EUR to GBP conversion rate from ECB",
+                    },
+                    "bitcoin_gbp": {
+                        "type": "number",
+                        "description": "Bitcoin price in GBP (calculated)",
+                    },
+                },
+            }
+        },
+    )
     def get(self, request):
         """
-        Get Bitcoin price in EUR, EUR to GBP conversion rate, and Bitcoin price in GBP.
+        Get Bitcoin prices and currency conversion rates.
 
         Returns:
-            - bitcoin_eur: The 15min delayed bitcoin market price in EUR
+            - bitcoin_eur: The 15min delayed Bitcoin market price in EUR
             - eur_to_gbp: Monthly conversion rate from EUR to GBP from the European Central Bank
             - bitcoin_gbp: The price from bitcoin_eur converted to GBP using the official ECB rate
         """
-        # Get Bitcoin price in EUR
-
-        bitcoin_eur = get_bitcoin_price_eur()
-
-        # Get EUR to GBP conversion rate
-        eur_to_gbp = get_eur_to_gbp_rate()
-
-        # Calculate Bitcoin price in GBP
-        bitcoin_gbp = calculate_bitcoin_price_gbp(bitcoin_eur, eur_to_gbp)
+        # Get all currency rates
+        rates = get_currency_rates()
 
         # Return the data
-        return Response(
-            {"bitcoin_eur": bitcoin_eur, "eur_to_gbp": eur_to_gbp, "bitcoin_gbp": bitcoin_gbp}
-        )
+        return Response(rates)
